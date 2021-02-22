@@ -2,6 +2,7 @@
     "name": "bedivierre/elighten-insider",
     "description": "In-site module for Enlighten data collection",
     "type": "library",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Bedivierre",

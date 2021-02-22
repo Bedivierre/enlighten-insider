@@ -10,6 +10,12 @@ class EnlightenBase
     protected $function = 'func';
     protected $method = 'post';
 
+    protected $data = [];
+
+    public function __construct()
+    {
+    }
+
     public function getFunction(){
         return join('/', [$this->controller, $this->function]);
     }
@@ -23,7 +29,10 @@ class EnlightenBase
         return join('/', [$host, $apiPath, $func]);
     }
 
-    public function send($data = []){
+    public function send(){
+        return $this->_send($this->data);
+    }
+    protected function _send($data){
         if(!is_array($data))
             throw new \Exception('EnlightenBase::send($data) should get array as argument');
         $methods = ['get', 'post'];
@@ -96,7 +105,14 @@ class EnlightenBase
         return self::processResult($ch);
     }
 
-
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @param bool $overwrite
+     */
+    protected function addData($key, $value, $overwrite = true){
+        $this->data = EnlightenUtility::array_add($this->data, $key, $value, $overwrite);
+    }
 
     public static function getHost(){
         return trim(EnlightenConfig::$protocol, '/')
@@ -124,5 +140,31 @@ class EnlightenBase
             $return = $body;
         curl_close($ch);
         return $return;
+    }
+
+    protected function createDataEntry(&$array, $type, $value, $additionalData = null){
+        $type = trim($type);
+        $value = trim($value);
+        $additionalData = trim($additionalData);
+
+        //if data type not existed
+        if(!isset($array[$type])){
+            if(!$additionalData)
+                $array[$type] = $value;
+            else
+                $array[$type] = [$value=>$additionalData];
+            return;
+        }
+        //else
+        $tdata = $array[$type];
+        if(is_scalar($tdata)){
+            $tdata = [$tdata];
+        }
+        if(!$additionalData)
+            $tdata[] = $value;
+        else
+            $tdata[$value] = $additionalData;
+
+        $array[$type] = $tdata;
     }
 }
