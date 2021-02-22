@@ -1,0 +1,24 @@
+{
+    "name": "bedivierre/elighten-insider",
+    "description": "In-site module for Enlighten data collection",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Bedivierre",
+            "email": "bookvariant@list.ru"
+        }
+    ],
+    "require": {
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bedivierre\\Enlighten\\Insider\\" : "src/",
+            "Bedivierre\\Enlighten\\Insider\\Core\\" : "src/Core/",
+            "Bedivierre\\Enlighten\\Insider\\API\\" : "src/API/",
+            "Bedivierre\\Enlighten\\Insider\\API\\Test\\" : "src/API/Test/",
+            "Bedivierre\\Enlighten\\Insider\\Exceptions\\" : "src/Exceptions/"
+        }
+    }
+}
