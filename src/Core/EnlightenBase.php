@@ -16,12 +16,28 @@ class EnlightenBase
     {
     }
 
+    /** Устанавливает значение в корень отправляемых данных. Можно использовать dot-нотацию.
+     * @param $key
+     * @param $value
+     * @param bool $overwrite
+     */
+    public function addBaseDataValue($key, $value, $overwrite = true){
+        if(EnlightenUtility::array_path($this->data, $key) && !$overwrite)
+            return;
+        $this->data = EnlightenUtility::array_add($this->data, $key, $value, $overwrite);
+    }
+
     public function getFunction(){
         return join('/', [$this->controller, $this->function]);
     }
     public function getMethod(){
         return strtolower($this->method);
     }
+
+    /**
+     * Возвращает полный путь к API
+     * @return string
+     */
     public function getFullPath(){
         $host = self::getHost();
         $apiPath = self::getApiPath();
@@ -29,6 +45,11 @@ class EnlightenBase
         return join('/', [$host, $apiPath, $func]);
     }
 
+    /**
+     * Отправляет запрос в указанную функцию через указанный же протокол.
+     * @return string|array
+     * @throws \Exception
+     */
     public function send(){
         return $this->_send($this->data);
     }
@@ -105,15 +126,6 @@ class EnlightenBase
         return self::processResult($ch);
     }
 
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @param bool $overwrite
-     */
-    protected function addData($key, $value, $overwrite = true){
-        $this->data = EnlightenUtility::array_add($this->data, $key, $value, $overwrite);
-    }
-
     public static function getHost(){
         return trim(EnlightenConfig::$protocol, '/')
             . '://' . trim(EnlightenConfig::$host, '/');
@@ -142,29 +154,26 @@ class EnlightenBase
         return $return;
     }
 
-    protected function createDataEntry(&$array, $type, $value, $additionalData = null){
+    protected function createDataEntry(&$dataContainer, $type, $value, $additionalData = null){
         $type = trim($type);
         $value = trim($value);
         $additionalData = trim($additionalData);
 
         //if data type not existed
-        if(!isset($array[$type])){
-            if(!$additionalData)
-                $array[$type] = $value;
-            else
-                $array[$type] = [$value=>$additionalData];
-            return;
+        if(!isset($dataContainer[$type])){
+            $dataContainer[$type] = [];
         }
-        //else
-        $tdata = $array[$type];
-        if(is_scalar($tdata)){
-            $tdata = [$tdata];
-        }
-        if(!$additionalData)
-            $tdata[] = $value;
-        else
-            $tdata[$value] = $additionalData;
 
-        $array[$type] = $tdata;
+        $dataValue = [
+            'value' => $value,
+        ];
+        if($additionalData)
+            $dataValue['data'] = $additionalData;
+
+        $dataContainer[$type][] = $dataValue;
+    }
+
+    public static function getDataType($key){
+        return EnlightenData::getType($key);
     }
 }

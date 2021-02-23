@@ -16,10 +16,10 @@ class ClientRegister extends EnlightenBase
     private $clientIndex = -1;
     private $clients = [];
 
-    public function __construct($id = 0, $login = '', $clientData = [])
+    public function __construct($id = 0, $clientData = [])
     {
         parent::__construct();
-        $this->addClient($id, $login, $clientData);
+        $this->addClient($id,  $clientData);
     }
 
     /**
@@ -28,13 +28,16 @@ class ClientRegister extends EnlightenBase
      * 'data' value is not mandatory.
      * @throws \Exception
      */
-    public function addClient($id, $login = '', $clientData = []){
+    public function addClient($id, $clientData = [], $login = null, $phone = null){
         $this->clients[] = [
             'data'=>[],
         ];
         $this->clientIndex = $this->count() - 1;
         $this->setClientId($id);
-        $this->setClientLogin($login);
+        if($login)
+            $this->setClientLogin($login);
+        if($phone)
+            $this->setClientPhone($phone);
         if(!is_array($clientData))
             return;
         foreach ($clientData as $d){
@@ -85,7 +88,7 @@ class ClientRegister extends EnlightenBase
     }
     public function send(){
 
-        $this->addData('clients', $this->clients);
+        $this->addBaseDataValue('clients', $this->clients);
         return parent::send();
     }
 

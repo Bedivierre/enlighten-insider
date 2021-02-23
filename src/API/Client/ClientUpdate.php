@@ -8,7 +8,7 @@ use Bedivierre\Enlighten\Insider\Core\EnlightenBase;
 use Bedivierre\Enlighten\Insider\Core\EnlightenData;
 use Bedivierre\Enlighten\Insider\Core\EnlightenUtility;
 
-class ClientRegister extends EnlightenBase
+class ClientUpdate extends EnlightenBase
 {
     protected $controller = 'client';
     protected $function = 'update';
@@ -78,7 +78,7 @@ class ClientRegister extends EnlightenBase
     }
     public function send(){
 
-        $this->addData('clients', $this->clients);
+        $this->addBaseDataValue('clients', $this->clients);
         return parent::send();
     }
 
