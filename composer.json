@@ -21,6 +21,7 @@
             "Bedivierre\\Enlighten\\Insider\\API\\Test\\" : "src/API/Test/",
             "Bedivierre\\Enlighten\\Insider\\API\\Client\\" : "src/API/Client/",
             "Bedivierre\\Enlighten\\Insider\\API\\Order\\" : "src/API/Order/",
+            "Bedivierre\\Enlighten\\Insider\\API\\Promocode\\" : "src/API/Promocode/",
             "Bedivierre\\Enlighten\\Insider\\Exceptions\\" : "src/Exceptions/"
         }
     }
