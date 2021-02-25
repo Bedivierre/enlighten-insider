@@ -25,6 +25,9 @@ class EnlightenEvent extends EnlightenBase
     public function setOwnerPhone($phone){
         $this->addBaseDataValue('phone', $phone);
     }
+    public function setCreatedDate($timestamp){
+        $this->addBaseDataValue('phone', $timestamp);
+    }
 
     public function addEventData($type, $value, $data = null){
         $this->createDataEntry($this->eventData, $type, $value, $data);

@@ -52,6 +52,12 @@ class ClientRegister extends EnlightenBase
             return;
         $this->clients[$index]['id'] = trim($id);
     }
+    public function setClientCreated($timestamp, $index = null){
+        $index = $this->getIndex($index);
+        if(!$timestamp)
+            return;
+        $this->clients[$index]['created'] = $timestamp;
+    }
     public function setClientLogin($login, $index = null){
         $index = $this->getIndex($index);
         if(!trim($login))
