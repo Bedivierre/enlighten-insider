@@ -9,9 +9,7 @@ use Bedivierre\Enlighten\Insider\Core\EnlightenData;
 use Bedivierre\Enlighten\Insider\Core\EnlightenEvent;
 use Bedivierre\Enlighten\Insider\Core\EnlightenUtility;
 
-class ClientUpdate extends EnlightenEvent
+class ClientUpdate extends ClientEvent
 {
-    protected $controller = 'client';
     protected $function = 'update';
-
 }

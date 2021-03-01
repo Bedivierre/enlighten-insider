@@ -9,9 +9,8 @@ use Bedivierre\Enlighten\Insider\Core\EnlightenData;
 use Bedivierre\Enlighten\Insider\Core\EnlightenEvent;
 use Bedivierre\Enlighten\Insider\Core\EnlightenUtility;
 
-class ClientRegister extends EnlightenEvent
+class ClientRegister extends ClientEvent
 {
-    protected $controller = 'client';
     protected $function = 'register';
 
 }
