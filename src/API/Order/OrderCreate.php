@@ -14,12 +14,12 @@ class OrderCreate extends EnlightenEvent
     protected $controller = 'order';
     protected $function = 'create';
 
-    public function __construct($clientId, $orderId, $sum, $positions)
+    public function __construct($clientId, $orderId, $sum, $positions, $phone = null)
     {
-        parent::__construct($clientId, []);
-        $this->addEventData('order.id', $orderId);
-        $this->addEventData('order.sum', (int)$sum);
-        $this->addEventData('order.position_count', (int)$positions);
-        $this->addBaseDataValue('order_id', $orderId);
+        parent::__construct($clientId, $phone, []);
+        $this->addData('order.id', $orderId);
+        $this->addData('order.sum', (int)$sum);
+        $this->addData('order.position_count', (int)$positions);
+        $this->addBaseEntityValue('order_id', $orderId);
     }
 }

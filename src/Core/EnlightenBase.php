@@ -12,6 +12,10 @@ class EnlightenBase
 
     protected $data = [];
 
+    protected $dataContainer = [];
+    protected $dataContainerName = '';
+    protected $dataContainerIndex = -1;
+
     public function __construct()
     {
     }
@@ -26,6 +30,102 @@ class EnlightenBase
             return;
         $this->data = EnlightenUtility::array_add($this->data, $key, $value, $overwrite);
     }
+    /** Устанавливает значение в корень отправляемых данных. Можно использовать dot-нотацию.
+     * @param $key
+     * @param $value
+     * @param bool $overwrite
+     */
+    public function addBaseEntityValue($key, $value, $index = null){
+        $index = $this->getIndex($index);
+        if(!$this->has($index))
+            return;
+        $this->dataContainer[$index][$key] = $value;
+    }
+
+
+
+    protected function createDataEntry(&$dataContainer, $type, $value, $additionalData = null){
+        $type = trim($type);
+        $value = trim($value);
+        $additionalData = trim($additionalData);
+
+        //if data type not existed
+        if(!isset($dataContainer[$type])){
+            $dataContainer[$type] = [];
+        }
+
+        $dataValue = [
+            'value' => $value,
+        ];
+        if($additionalData)
+            $dataValue['data'] = $additionalData;
+
+        $dataContainer[$type][] = $dataValue;
+    }
+    public function count(){
+        return count($this->dataContainer);
+    }
+    function getIndex($index = null){
+        if($index === null)
+            $index = $this->dataContainerIndex;
+        if(!isset($this->dataContainer[$index]))
+            throw new \Exception('Wrong data entity index');
+        return $index;
+    }
+    public function addNew($id, $phone = null, $clientData = []){
+        $this->dataContainer[] = [
+            'data'=>[],
+        ];
+        $this->dataContainerIndex = $this->count() - 1;
+        $this->setClientId($id);
+        if($phone)
+            $this->setClientPhone($phone);
+        if(!is_array($clientData))
+            return;
+        foreach ($clientData as $d){
+            if(!is_array($d) || !isset($d['type']) || !isset($d['value']))
+                continue;
+            $this->addData($d['type'], $d['value'], $d['data'] ?? null);
+        }
+    }
+
+    public function get($index = null){
+        if($index === null)
+            return $this->dataContainer;
+        if(isset($this->dataContainer[$index]))
+            return $this->dataContainer[$index];
+        return null;
+    }
+    public function addData($type, $value, $data = null, $index = null){
+        $index = $this->getIndex($index);
+        $arr = $this->dataContainer[$index]['data'];
+        $this->createDataEntry($arr, $type, $value, $data);
+        $this->addBaseEntityValue('data', $arr, $index);
+    }
+    public function setClientId($id, $index = null){
+        $index = $this->getIndex($index);
+        if(!$id || $id < 0)
+            return;
+        $this->addBaseEntityValue('id', trim($id), $index);
+    }
+    public function setClientPhone($phone, $index = null){
+        $index = $this->getIndex($index);
+        if(!trim($phone))
+            return;
+        $this->addBaseEntityValue('phone', trim($phone), $index);
+    }
+    public function setCreatedDate($timestamp, $index = null){
+        $index = $this->getIndex($index);
+        if(!$timestamp || !is_numeric($timestamp))
+            return;
+        $this->addBaseEntityValue('created', trim($timestamp), $index);
+    }
+    public function has($index){
+        return isset($this->dataContainer[$index]);
+    }
+
+
+
 
     public function getFunction(){
         return join('/', [$this->controller, $this->function]);
@@ -51,6 +151,9 @@ class EnlightenBase
      * @throws \Exception
      */
     public function send(){
+        if(!empty($this->dataContainer) && $this->dataContainerName){
+            $this->data[$this->dataContainerName] = $this->dataContainer;
+        }
         return $this->_send($this->data);
     }
     protected function _send($data){
@@ -60,7 +163,7 @@ class EnlightenBase
         $method = $this->getMethod();
         if(!in_array($method, $methods))
             $method = 'post';
-        return $this->{$method}($data);
+        return $this->{'_'.$method}($data);
     }
 
 
@@ -79,7 +182,7 @@ class EnlightenBase
      * представляющий результат запроса.
      * @throws \Exception
      */
-    protected function get($data = []){
+    protected function _get($data = []){
         if(!is_array($data))
             throw new \Exception('EnlightenBase::get($data) should get array as argument');
         $url = $this->getFullPath();
@@ -105,7 +208,7 @@ class EnlightenBase
      * представляющий результат запроса.
      * @throws \Exception
      */
-    protected function post($data = []){
+    protected function _post($data = []){
         if(!is_array($data))
             throw new \Exception('EnlightenBase::post($data) should get array as argument');
         $url = $this->getFullPath();
@@ -154,26 +257,11 @@ class EnlightenBase
         return $return;
     }
 
-    protected function createDataEntry(&$dataContainer, $type, $value, $additionalData = null){
-        $type = trim($type);
-        $value = trim($value);
-        $additionalData = trim($additionalData);
-
-        //if data type not existed
-        if(!isset($dataContainer[$type])){
-            $dataContainer[$type] = [];
-        }
-
-        $dataValue = [
-            'value' => $value,
-        ];
-        if($additionalData)
-            $dataValue['data'] = $additionalData;
-
-        $dataContainer[$type][] = $dataValue;
-    }
-
     public static function getDataType($key){
         return EnlightenData::getType($key);
     }
+
+
+
 }
+

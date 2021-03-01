@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Bedivierre\Enlighten\Insider\API\Order;
+namespace Bedivierre\Enlighten\Insider\API\Promocode;
 
 
 use Bedivierre\Enlighten\Insider\Core\EnlightenBase;
@@ -14,12 +14,12 @@ class PromocodeUse extends EnlightenEvent
     protected $controller = 'promocode';
     protected $function = 'use';
 
-    public function __construct($clientId, $code = null, $discount = null)
+    public function __construct($clientId, $phone, $code = null, $discount = null)
     {
-        parent::__construct($clientId, []);
+        parent::__construct($clientId, $phone, []);
         if($code)
-            $this->addEventData(self::getDataType('promocode.code'), $code);
+            $this->addData(self::getDataType('promocode.code'), $code);
         if($discount)
-            $this->addEventData(self::getDataType('promocode.discount'), $discount);
+            $this->addData(self::getDataType('promocode.discount'), $discount);
     }
 }
