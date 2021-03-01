@@ -72,7 +72,7 @@ class EnlightenBase
             throw new \Exception('Wrong data entity index');
         return $index;
     }
-    public function addNew($id, $phone = null, $clientData = []){
+    protected function addNew($id, $phone = null, $clientData = []){
         $this->dataContainer[] = [
             'data'=>[],
         ];

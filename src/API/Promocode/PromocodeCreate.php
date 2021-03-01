@@ -9,17 +9,7 @@ use Bedivierre\Enlighten\Insider\Core\EnlightenData;
 use Bedivierre\Enlighten\Insider\Core\EnlightenEvent;
 use Bedivierre\Enlighten\Insider\Core\EnlightenUtility;
 
-class PromocodeCreate extends EnlightenEvent
+class PromocodeCreate extends PromocodeEvent
 {
-    protected $controller = 'promocode';
     protected $function = 'create';
-
-    public function __construct($clientId, $phone = null, $code = null, $discount = null)
-    {
-        parent::__construct($clientId, $phone, []);
-        if($code)
-            $this->addData(self::getDataType('promocode.code'), $code);
-        if($discount)
-            $this->addData(self::getDataType('promocode.discount'), $discount);
-    }
 }
