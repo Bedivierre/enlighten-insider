@@ -13,7 +13,7 @@ abstract class PromocodeEvent extends EnlightenEvent
 {
     protected $controller = 'promocode';
 
-    public function __construct($clientId, $phone, $code = null, $discount = null)
+    public function __construct($clientId = null, $phone = null, $code = null, $discount = null)
     {
         parent::__construct(null, null, []);
         if(!$clientId && !$phone)
