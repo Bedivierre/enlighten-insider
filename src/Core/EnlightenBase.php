@@ -18,7 +18,7 @@ class EnlightenBase
 
     public function __construct()
     {
-        $this->setCreatedDate(time());
+        //$this->setCreatedDate(time());
     }
 
     /** Устанавливает значение в корень отправляемых данных. Можно использовать dot-нотацию.

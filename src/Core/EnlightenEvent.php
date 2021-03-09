@@ -10,7 +10,9 @@ class EnlightenEvent extends EnlightenBase
     public function __construct($id = null, $phone = '', $eventData = [])
     {
         parent::__construct();
-        if($id || $phone)
+        if($id || $phone) {
             $this->addNew($id, $phone, $eventData);
+            $this->setCreatedDate(time());
+        }
     }
 }
