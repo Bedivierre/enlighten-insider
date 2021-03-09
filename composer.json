@@ -9,6 +9,7 @@
             "email": "bookvariant@list.ru"
         }
     ],
+    "version": "0.2",
     "require": {
         "ext-curl": "*",
         "ext-json": "*"
